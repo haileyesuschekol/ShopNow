@@ -65,7 +65,11 @@ const ProductScreen = () => {
               <ListGroup.Item>
                 {inStock ? (
                   <Button
-                    style={{ background: "Green", color: "white" }}
+                    style={{
+                      background: "Green",
+                      color: "white",
+                      border: "none",
+                    }}
                     className="btn-block"
                     type="button"
                   >
@@ -73,7 +77,11 @@ const ProductScreen = () => {
                   </Button>
                 ) : (
                   <Button
-                    style={{ background: "red", color: "white" }}
+                    style={{
+                      background: "red",
+                      color: "white",
+                      border: "none",
+                    }}
                     className="btn-block"
                     type="button"
                     disabled={product.countInStock === 0}
