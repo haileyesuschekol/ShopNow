@@ -5,21 +5,27 @@ import logo from "../assets/img/shopnowlogo.png"
 const Header = () => {
   return (
     <header>
-      <Navbar bg="light" variant="light" expand="md" collapseOnSelect>
+      <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
         <Container>
           <Navbar.Brand href="/">
-            <img src={logo} alt="logo" width="70rem" height="75rem" />
+            <img
+              src={logo}
+              alt="logo"
+              width="70rem"
+              height="75rem"
+              style={{ marginLeft: "3px" }}
+            />
             ShopNow
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <Nav.Link href="/cart">
-                <FaShoppingCart />
+                <FaShoppingCart style={{ marginRight: "5px" }} />
                 Cart
               </Nav.Link>
               <Nav.Link href="/login">
-                <FaUser />
+                <FaUser style={{ marginRight: "5px" }} />
                 Signin
               </Nav.Link>
             </Nav>
