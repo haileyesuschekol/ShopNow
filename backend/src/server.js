@@ -3,8 +3,9 @@ import dotenv from "dotenv"
 import cors from "cors"
 dotenv.config()
 import connectDb from "./config/db.js"
+import productRoute from "./routes/productRoutes.js"
 import products from "./data/product.js"
-
+import Product from "./models/productModel.js"
 connectDb() //connect to database
 const app = express()
 const port = process.env.PORT || 8000
@@ -18,14 +19,13 @@ app.use(
     optionsSuccessStatus: 204,
   })
 )
-app.get("/api/products", (req, res) => {
-  res.send(products)
+
+app.get("/", (req, res) => {
+  console.log("ShopNow")
 })
 
-app.get("/api/products/:id", (req, res) => {
-  const product = products.find((p) => p._id === req.params.id)
-  res.send(product)
-})
+app.use("/api/products", productRoute)
+
 app.listen(port, () => {
   console.log(`running on port ${port}`)
 })
