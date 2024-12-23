@@ -8,7 +8,9 @@
     "start": "node backend/src/server.js",
     "server": "nodemon backend/src/server.js",
     "client": "npm run dev --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/src/seeder.js",
+    "data:destroy": "node backend/src/seeder.js -d"
   },
   "author": "Haileyesus",
   "license": "ISC",
