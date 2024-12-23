@@ -6,6 +6,7 @@ import connectDb from "./config/db.js"
 import productRoute from "./routes/productRoutes.js"
 import products from "./data/product.js"
 import Product from "./models/productModel.js"
+import { notFound, errorHandler } from "./middleware/errorHandler.js"
 connectDb() //connect to database
 const app = express()
 const port = process.env.PORT || 8000
@@ -25,6 +26,9 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/products", productRoute)
+
+app.use(notFound)
+app.use(errorHandler)
 
 app.listen(port, () => {
   console.log(`running on port ${port}`)
