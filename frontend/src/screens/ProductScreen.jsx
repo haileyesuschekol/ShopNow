@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
 import {
   Col,
   Row,
@@ -9,24 +8,19 @@ import {
   Card,
   Button,
 } from "react-bootstrap"
+import { useGetProductDetailsQuery } from "../slices/productsApi"
 import Rating from "../components/Rating"
-import axios from "axios"
+
 const ProductScreen = () => {
-  const [product, setProducts] = useState([])
   const { id: productId } = useParams()
+  const {
+    data: product,
+    error,
+    isLoading,
+  } = useGetProductDetailsQuery(productId)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await axios.get(
-        `http://localhost:8000/api/products/${productId}`
-      )
-      setProducts(data)
-    }
-
-    fetchUser()
-  }, [productId])
-
-  const inStock = product.countInStock
+  if (isLoading) return <h2>Loading ...</h2>
+  if (error) return <h2>Error</h2>
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -75,7 +69,7 @@ const ProductScreen = () => {
               </ListGroup.Item>
 
               <ListGroup.Item>
-                {inStock ? (
+                {product.countInStock ? (
                   <Button
                     style={{
                       background: "Green",
