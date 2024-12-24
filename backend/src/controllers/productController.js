@@ -8,7 +8,7 @@ const getAllProduct = async (req, res) => {
     }
     res.status(200).json(product)
   } catch (error) {
-    res.send("not found")
+    res.send(error)
   }
 }
 
