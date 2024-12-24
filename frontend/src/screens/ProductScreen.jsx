@@ -8,6 +8,7 @@ import {
   Card,
   Button,
 } from "react-bootstrap"
+import Loader from "../components/Loader"
 import { useGetProductDetailsQuery } from "../slices/productsApi"
 import Rating from "../components/Rating"
 
@@ -19,7 +20,7 @@ const ProductScreen = () => {
     isLoading,
   } = useGetProductDetailsQuery(productId)
 
-  if (isLoading) return <h2>Loading ...</h2>
+  if (isLoading) return <Loader />
   if (error) return <h2>Error</h2>
   return (
     <>
