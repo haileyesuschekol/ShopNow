@@ -9,6 +9,7 @@ import {
   Button,
 } from "react-bootstrap"
 import Loader from "../components/Loader"
+import Message from "../components/Message"
 import { useGetProductDetailsQuery } from "../slices/productsApi"
 import Rating from "../components/Rating"
 
@@ -21,7 +22,10 @@ const ProductScreen = () => {
   } = useGetProductDetailsQuery(productId)
 
   if (isLoading) return <Loader />
-  if (error) return <h2>Error</h2>
+  if (error)
+    return (
+      <Message variant="danger">{error?.data?.Message || error.error}</Message>
+    )
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
