@@ -25,8 +25,8 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/cart">
-                <Nav.Link>
+              <Nav.Link>
+                <Nav.Link as={Link} to="/cart">
                   <FaShoppingCart style={{ marginRight: "5px" }} />
                   Cart
                   {cartItems.length > 0 && (
