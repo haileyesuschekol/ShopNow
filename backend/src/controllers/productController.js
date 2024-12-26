@@ -1,4 +1,6 @@
 import Product from "../models/productModel.js"
+
+//get all products
 const getAllProduct = async (req, res) => {
   try {
     const product = await Product.find({})
@@ -12,6 +14,7 @@ const getAllProduct = async (req, res) => {
   }
 }
 
+// get single product
 const getSingleProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)

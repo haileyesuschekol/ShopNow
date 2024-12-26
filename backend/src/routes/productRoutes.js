@@ -5,8 +5,9 @@ import {
 } from "../controllers/productController.js"
 const router = express.Router()
 
-router.get("/", getAllProduct)
-
-router.get("/:id", getSingleProduct)
+// get all product
+router.route("/").get(getAllProduct)
+//get single product
+router.route("/:id").get(getSingleProduct)
 
 export default router
