@@ -1,7 +1,35 @@
 import User from "../models/userModel.js"
+import jwt from "jsonwebtoken"
 
 const authUser = async (req, res) => {
-  res.send("auth user")
+  try {
+    const { email, password } = req.body
+    const user = await User.findOne({ email })
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_LIFETIME,
+    })
+
+    //set jwt on http only cookie
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 1000, //30d
+    })
+    if (user && (await user.matchPassword(password))) {
+      res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      })
+    } else {
+      throw new Error("Invalid email or password!")
+    }
+  } catch (error) {
+    res.status(401).json({ error: error.message })
+  }
 }
 
 const registerUser = async (req, res) => {
