@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
       createToken(res, user._id)
 
       res.status(201).json({
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
@@ -58,11 +58,48 @@ const logoutUser = async (req, res) => {
 }
 
 const getUserProfile = async (req, res) => {
-  res.send("user profile")
+  const user = await User.findById(req.user._id)
+  try {
+    if (user) {
+      res.status(200).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      })
+    } else {
+      throw new Error("User not found!")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 const updateUserProfile = async (req, res) => {
-  res.send("update user profile")
+  const user = await User.findById(req.user._id)
+  try {
+    if (user) {
+      user.name = req.body.name || user.name
+      user.email = req.body.email || user.email
+
+      if (req.body.password) {
+        user.password = req.body.password
+      }
+
+      const updateUser = await user.save()
+
+      res.status(200).json({
+        _id: updateUser._id,
+        name: updateUser.name,
+        email: updateUser.email,
+        isAdmin: updateUser.isAdmin,
+      })
+    } else {
+      throw new Error("User not found")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 const getUsers = async (req, res) => {
