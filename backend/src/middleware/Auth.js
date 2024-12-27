@@ -11,13 +11,13 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decode.userId).select("-password")
       next()
       if (!decode) {
-        throw new Error("Not authorized, invalid token")
+        throw new Error("Not authenticate, invalid token")
       }
     } catch (error) {
       res.status(401).json({ error: error.message })
     }
   } else {
-    res.status(401).json("Not authorized, no token")
+    res.status(401).json("Not authenticate, no token")
   }
 }
 
