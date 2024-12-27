@@ -10,7 +10,7 @@ import {
   registerUser,
   updateUser,
   updateUserProfile,
-} from "../controllers/userController"
+} from "../controllers/userController.js"
 
 router.route("/").post(registerUser).get(getUsers)
 router.post("/login", authUser)

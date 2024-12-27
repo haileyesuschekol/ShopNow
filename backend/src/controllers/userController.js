@@ -1,4 +1,4 @@
-import User from "../models/userModel"
+import User from "../models/userModel.js"
 
 const authUser = async (req, res) => {
   res.send("auth user")
