@@ -1,7 +1,8 @@
 import express from "express"
 import dotenv from "dotenv"
-import cors from "cors"
 dotenv.config()
+import cors from "cors"
+import cookieParser from "cookie-parser"
 import connectDb from "./config/db.js"
 import productRoute from "./routes/productRoutes.js"
 import userRoute from "./routes/userRoutes.js"
@@ -12,6 +13,7 @@ connectDb() //connect to database
 const app = express()
 const port = process.env.PORT || 8000
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
