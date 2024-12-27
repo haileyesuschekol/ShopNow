@@ -1,22 +1,12 @@
 import User from "../models/userModel.js"
-import jwt from "jsonwebtoken"
-
+import createToken from "../utils/createToken.js"
 const authUser = async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await User.findOne({ email })
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_LIFETIME,
-    })
+    createToken(user._id)
 
-    //set jwt on http only cookie
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 1000, //30d
-    })
     if (user && (await user.matchPassword(password))) {
       res.status(200).json({
         _id: user._id,
@@ -33,7 +23,29 @@ const authUser = async (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-  res.send("register user")
+  const { name, email, password } = req.body
+
+  try {
+    const userExists = await User.findOne({ email })
+    if (userExists) {
+      throw new Error("User already exists!")
+    }
+    //create user
+    const user = await User.create({ name, email, password })
+    if (user) {
+      //create token
+      createToken(res, user._id)
+
+      res.status(201).json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      })
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
 }
 
 const logoutUser = async (req, res) => {
