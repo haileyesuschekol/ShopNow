@@ -37,7 +37,12 @@ const registerUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-  res.send("logout user")
+  res.cookie("jwt", "", {
+    expiresIn: new Date(0),
+    httpOnly: true,
+  })
+
+  res.status(200).json({ message: "Logout Successfully!" })
 }
 
 const getUserProfile = async (req, res) => {
