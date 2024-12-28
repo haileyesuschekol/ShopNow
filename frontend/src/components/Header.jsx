@@ -1,11 +1,30 @@
-import { useSelector } from "react-redux"
-import { Navbar, Nav, Container, Badge } from "react-bootstrap"
-import { FaShoppingCart, FaUser } from "react-icons/fa"
-import logo from "../assets/img/shopnowlogo.png"
+import { useSelector, useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap"
 import { Link } from "react-router-dom"
+import { FaShoppingCart, FaUser } from "react-icons/fa"
+import { logout } from "../slices/authSlice"
+import { useLogoutMutation } from "../slices/usersApiSlice"
+import logo from "../assets/img/shopnowlogo.png"
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart)
+  const { userInfo } = useSelector((state) => state.auth)
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const [logoutApiCall] = useLogoutMutation()
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap()
+      dispatch(logout())
+      navigate("/login")
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
@@ -36,12 +55,27 @@ const Header = () => {
                   )}
                 </Nav.Link>
               </Nav.Link>
-              <Nav.Link as={Link} to="/login">
-                <Nav.Link href="/login">
-                  <FaUser style={{ marginRight: "5px" }} />
-                  Signin
+              {userInfo ? (
+                <NavDropdown
+                  title={userInfo.name}
+                  id="username"
+                  style={{ marginTop: "9px" }}
+                >
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <Nav.Link as={Link} to="/login">
+                  <Nav.Link href="/login">
+                    <FaUser style={{ marginRight: "5px" }} />
+                    Signin
+                  </Nav.Link>
                 </Nav.Link>
-              </Nav.Link>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

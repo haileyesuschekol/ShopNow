@@ -5,7 +5,7 @@ const authUser = async (req, res) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
 
-    createToken(user._id)
+    createToken(res, user._id)
 
     if (user && (await user.matchPassword(password))) {
       res.status(200).json({
