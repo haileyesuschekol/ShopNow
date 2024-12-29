@@ -72,7 +72,7 @@ const Header = () => {
                 <Nav.Link as={Link} to="/login">
                   <Nav.Link href="/login">
                     <FaUser style={{ marginRight: "5px" }} />
-                    Signin
+                    Sign-in
                   </Nav.Link>
                 </Nav.Link>
               )}
