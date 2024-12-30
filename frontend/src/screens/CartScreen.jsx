@@ -87,7 +87,7 @@ const CartScreen = () => {
               </h3>
               $
               {cartItems
-                .reduce((acc, item) => acc + item.quantity + item.price, 0)
+                .reduce((acc, item) => acc + item.quantity * item.price, 0)
                 .toFixed(2)}
             </ListGroup.Item>
 
