@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser"
 import connectDb from "./config/db.js"
 import productRoute from "./routes/productRoutes.js"
 import userRoute from "./routes/userRoutes.js"
+import orderRoute from "./routes/orderRoutes.js"
 import products from "./data/product.js"
 import Product from "./models/productModel.js"
 import { notFound, errorHandler } from "./middleware/errorHandler.js"
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", productRoute)
 app.use("/api/users", userRoute)
+app.use("/api/orders", orderRoute)
 
 app.use(notFound)
 app.use(errorHandler)
