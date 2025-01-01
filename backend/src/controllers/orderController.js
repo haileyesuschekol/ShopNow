@@ -24,13 +24,13 @@ const addOrderItems = async (req, res) => {
         user: req.user._id,
         shippingAddress,
         paymentMethod,
-        itemPrice,
+        itemsPrice,
         taxPrice,
         shippingPrice,
         totalPrice,
       })
 
-      const createOrder = await Order.save()
+      const createOrder = await order.save()
       res.status(201).json({ createOrder })
     }
   } catch (error) {
