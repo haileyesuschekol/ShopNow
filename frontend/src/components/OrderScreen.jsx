@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { Row, Col, ListGroup, Image, Form, Button, Card } from "react-bootstrap"
+import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap"
 import { toast } from "react-toastify"
 import { useSelector } from "react-redux"
 import Message from "../components/Message"
@@ -29,6 +29,7 @@ const OrderScreen = () => {
     error: errorPayPal,
   } = useGetPaypalClientIdQuery()
   const { userInfo } = useSelector((state) => state.auth)
+  const cart = useSelector((state) => state.cart)
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
@@ -49,6 +50,45 @@ const OrderScreen = () => {
       }
     }
   }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal])
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async function (details) {
+      try {
+        await payOrder({ orderId, details })
+        refetch()
+        toast.success("Payment successful")
+      } catch (error) {
+        toast.error(`Error, please try again!`)
+        toast.error(error?.message || error?.data?.message)
+      }
+    })
+  }
+
+  async function onApproveTest() {
+    await payOrder({ orderId, details: { payer: {} } })
+    refetch()
+    toast.success("Payment successful")
+  }
+
+  const onError = (error) => {
+    toast.error(error.message)
+  }
+
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: order.totalPrice,
+            },
+          },
+        ],
+      })
+      .then((orderId) => {
+        return orderId
+      })
+  }
 
   if (isLoading) return <Loader />
   if (error) return <Message variant="danger">Error while processing</Message>
@@ -85,7 +125,7 @@ const OrderScreen = () => {
               <h2>Payment Method</h2>
               <p>
                 <strong>Method: </strong>
-                {order.paymentMethod}
+                {cart.paymentMethod}
               </p>
               {order.isPaid ? (
                 <Message variant="success">Paid on {order.paidAt}</Message>
@@ -145,8 +185,31 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* pay order placeholder */}
-              {/* mark as deliverd placeholder */}
+
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {isPending ? (
+                    <Loader />
+                  ) : (
+                    <div>
+                      <Button
+                        onClick={onApproveTest}
+                        style={{ marginBottom: "10px" }}
+                      >
+                        Test Pay Order
+                      </Button>
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
+                    </div>
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

@@ -50,6 +50,7 @@ const getOrderById = async (req, res) => {
   )
   try {
     if (order) {
+      order.paidAt = new Date()
       res.status(200).json(order)
     } else {
       throw new Error("Order not found")
