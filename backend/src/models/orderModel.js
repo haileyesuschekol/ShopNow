@@ -68,6 +68,10 @@ const orderSchema = new mongoose.Schema(
     deliverdAt: {
       type: Date,
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timeStamps: true }
 )

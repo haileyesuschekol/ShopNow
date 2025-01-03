@@ -34,6 +34,7 @@ const PlaceOrderScreen = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
+        createdAt: Date.now(),
       }).unwrap()
       dispatch(cleareCartItem())
       navigate(`/order/${res.createOrder._id}`)

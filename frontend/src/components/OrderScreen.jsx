@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap"
 import { toast } from "react-toastify"
+import { format } from "date-fns"
 import { useSelector } from "react-redux"
 import Message from "../components/Message"
 import Loader from "../components/Loader"
@@ -92,6 +93,11 @@ const OrderScreen = () => {
 
   if (isLoading) return <Loader />
   if (error) return <Message variant="danger">Error while processing</Message>
+
+  const formattedDateTime = order.paidAt
+    ? format(new Date(order.paidAt), "yyyy-MM-dd HH:mm")
+    : "Not Paid"
+
   return (
     <>
       <h1>Order Number: {order._id}</h1>
@@ -128,7 +134,7 @@ const OrderScreen = () => {
                 {cart.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
+                <Message variant="success">Paid on {formattedDateTime}</Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}

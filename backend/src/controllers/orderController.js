@@ -39,8 +39,16 @@ const addOrderItems = async (req, res) => {
 }
 
 const getMyOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user._id })
-  res.status(200).json(orders)
+  const order = await Order.find({ user: req.user._id })
+  try {
+    if (order) {
+      res.status(200).json(order)
+    } else {
+      throw new Error("Order not found")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 const getOrderById = async (req, res) => {
@@ -50,7 +58,6 @@ const getOrderById = async (req, res) => {
   )
   try {
     if (order) {
-      order.paidAt = new Date()
       res.status(200).json(order)
     } else {
       throw new Error("Order not found")
@@ -65,7 +72,7 @@ const updateOrderToPaid = async (req, res) => {
   try {
     if (order) {
       order.isPaid = true
-      order.paidAt - Date.now()
+      order.paidAt = Date.now()
       order.paymentResult = {
         id: req.body.id,
         status: req.body.status,
