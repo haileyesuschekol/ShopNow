@@ -28,7 +28,7 @@ const OrderScreen = () => {
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPaypalClientIdQuery()
-  const { userInfo } = useSelector((state) => state.auth)
+  // const { userInfo } = useSelector((state) => state.auth)
   const cart = useSelector((state) => state.cart)
 
   useEffect(() => {
