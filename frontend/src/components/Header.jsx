@@ -55,6 +55,15 @@ const Header = () => {
                   )}
                 </Nav.Link>
               </Nav.Link>
+
+              {userInfo && userInfo.isAdmin && (
+                <Nav.Link>
+                  <Nav.Link as={Link} to="/admin/orderlist">
+                    Admin
+                  </Nav.Link>
+                </Nav.Link>
+              )}
+
               {userInfo ? (
                 <NavDropdown
                   title={userInfo.name}
