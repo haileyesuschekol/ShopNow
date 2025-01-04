@@ -11,6 +11,7 @@ import {
   useGetOrderDetailQuery,
   useGetPaypalClientIdQuery,
   usePayOrderMutation,
+  useDeliverOrderMutation,
 } from "../slices/orderApiSlice"
 
 const OrderScreen = () => {
@@ -23,13 +24,15 @@ const OrderScreen = () => {
   } = useGetOrderDetailQuery(orderId)
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation()
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation()
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer()
   const {
     data: paypal,
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPaypalClientIdQuery()
-  // const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth)
   const cart = useSelector((state) => state.cart)
 
   useEffect(() => {
@@ -91,13 +94,27 @@ const OrderScreen = () => {
       })
   }
 
+  const deliverOrderHandler = async () => {
+    try {
+      await deliverOrder(orderId)
+      refetch()
+      toast.success("Order delivered")
+    } catch (error) {
+      toast.error("Something went wrong")
+      toast.error(error.message)
+    }
+  }
+
   if (isLoading) return <Loader />
   if (error) return <Message variant="danger">Error while processing</Message>
 
-  const formattedDateTime = order.paidAt
+  const paidAtFormmated = order.paidAt
     ? format(new Date(order.paidAt), "yyyy-MM-dd HH:mm")
     : "Not Paid"
 
+  const deliveredAtFormatted = order.deliveredAt
+    ? format(new Date(order.deliveredAt), "yyyy-MM-dd HH:mm")
+    : "Not Paid"
   return (
     <>
       <h1>Order Number: {order._id}</h1>
@@ -120,8 +137,8 @@ const OrderScreen = () => {
                 {order.shippingAddress.postalCode},{" "}
                 {order.shippingAddress.country}
               </p>
-              {order.isDeliverd ? (
-                <Message>Deliverd on {order.deliverdAt}</Message>
+              {order.isDelivered ? (
+                <Message>Deliverd on {deliveredAtFormatted}</Message>
               ) : (
                 <Message variant="danger">Not Deliverd</Message>
               )}
@@ -134,7 +151,7 @@ const OrderScreen = () => {
                 {cart.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paid on {formattedDateTime}</Message>
+                <Message variant="success">Paid on {paidAtFormmated}</Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}
@@ -216,6 +233,21 @@ const OrderScreen = () => {
                   )}
                 </ListGroup.Item>
               )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverOrderHandler}
+                    >
+                      Mark As Deliverd
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
