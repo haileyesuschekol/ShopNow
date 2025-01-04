@@ -94,8 +94,20 @@ const updateToDeliverd = async (req, res) => {
   res.send("update to delivered")
 }
 
+//@desc     Get all orders
+// @route   Get api/orders
+//@access   private/Admin
 const getOrders = async (req, res) => {
-  res.send("get all orders")
+  const orders = await Order.find({}).populate("user", "id name")
+  try {
+    if (orders) {
+      res.status(200).json(orders)
+    } else {
+      throw new Error("Order not found")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 export {
