@@ -90,8 +90,23 @@ const updateOrderToPaid = async (req, res) => {
   }
 }
 
+//@desc     update orders to deliver
+// @route   PUT api/orders/:id/deliver
+//@access   private/Admin
 const updateToDeliverd = async (req, res) => {
-  res.send("update to delivered")
+  const order = await Order.findById(req.params.id)
+  try {
+    if (order) {
+      order.isDelivered = true
+      order.deliveredAt = Date.now()
+      const updateOrder = await order.save()
+      res.status(200).json(order)
+    } else {
+      throw new Error("Order not found")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 //@desc     Get all orders
