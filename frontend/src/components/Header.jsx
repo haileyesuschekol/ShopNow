@@ -56,14 +56,6 @@ const Header = () => {
                 </Nav.Link>
               </Nav.Link>
 
-              {userInfo && userInfo.isAdmin && (
-                <Nav.Link>
-                  <Nav.Link as={Link} to="/admin/orderlist">
-                    Admin
-                  </Nav.Link>
-                </Nav.Link>
-              )}
-
               {userInfo ? (
                 <NavDropdown
                   title={userInfo.name}
@@ -84,6 +76,25 @@ const Header = () => {
                     Sign-in
                   </Nav.Link>
                 </Nav.Link>
+              )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown
+                  title="Admin"
+                  id="username"
+                  style={{ marginTop: "9px" }}
+                >
+                  <NavDropdown.Item as={Link} to="/admin/productlist">
+                    Products
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Item as={Link} to="/admin/orderlist">
+                    Orders
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Item as={Link} to="/admin/userlist">
+                    Users
+                  </NavDropdown.Item>
+                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>
