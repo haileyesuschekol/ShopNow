@@ -4,12 +4,27 @@ import { Table, Button, Row, Col } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import Message from "../../components/Message"
 import Loader from "../../components/Loader"
-import { useGetProductsQuery } from "../../slices/productsApi"
+import {
+  useGetProductsQuery,
+  useCreateProductMutation,
+} from "../../slices/productsApi"
+import { toast } from "react-toastify"
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery()
+  const { data: products, isLoading, error, refetch } = useGetProductsQuery()
+  const [createProduct, { isLoading: loadingProduct }] =
+    useCreateProductMutation()
+
   const deleteHandler = () => {
     console.log("delete")
+  }
+  const createProductHandler = async () => {
+    try {
+      await createProduct()
+      refetch()
+    } catch (error) {
+      toast.error(error?.data?.message || error.error)
+    }
   }
 
   return (
@@ -19,9 +34,12 @@ const ProductListScreen = () => {
           <h2>Products</h2>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m-3">Create Product</Button>
+          <Button className="btn-sm m-3" onClick={createProductHandler}>
+            Create Product
+          </Button>
         </Col>
       </Row>
+      {loadingProduct && <Loader />}
 
       {isLoading ? (
         <Loader />
