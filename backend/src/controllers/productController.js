@@ -80,4 +80,23 @@ const updateProduct = async (req, res) => {
   }
 }
 
-export { getAllProduct, getSingleProduct, createProduct, updateProduct }
+const deleteProduct = async () => {
+  const product = await Product.findById(req.params.id)
+  try {
+    if (product) {
+      await Product.deleteOne({ _id: product._id })
+      res.status(200).json({ message: "Product Deleted Successfullt" })
+    } else {
+      throw new Error("Resource not found")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
+}
+export {
+  getAllProduct,
+  getSingleProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+}
