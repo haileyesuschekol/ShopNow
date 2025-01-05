@@ -149,7 +149,28 @@ const deleteUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  res.send("update user")
+  const user = await User.findById(req.params.id)
+
+  try {
+    if (user) {
+      user.name = req.body.name || user.name
+      user.email = req.body.email || <user className="eamil"></user>
+      user.isAdmin = Boolean(req.body.isAdmin)
+
+      const updatedUser = await user.save()
+
+      res.status(200).json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      })
+    } else {
+      throw new Error("User not found")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 export {
