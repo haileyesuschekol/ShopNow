@@ -1,3 +1,4 @@
+import path from "path"
 import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
@@ -7,6 +8,7 @@ import connectDb from "./config/db.js"
 import productRoute from "./routes/productRoutes.js"
 import userRoute from "./routes/userRoutes.js"
 import orderRoute from "./routes/orderRoutes.js"
+import uploadRoute from "./routes/uploadRoutes.js"
 import products from "./data/product.js"
 import Product from "./models/productModel.js"
 import { notFound, errorHandler } from "./middleware/errorHandler.js"
@@ -34,10 +36,14 @@ app.get("/", (req, res) => {
 app.use("/api/products", productRoute)
 app.use("/api/users", userRoute)
 app.use("/api/orders", orderRoute)
+app.use("/api/upload", uploadRoute)
 
 app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 })
+
+const __dirname = path.resolve()
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")))
 
 app.use(notFound)
 app.use(errorHandler)
