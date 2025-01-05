@@ -15,6 +15,7 @@ const HomeScreen = () => {
         {product.map((product) => (
           <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
             <Product product={product} />
+            {console.log(product)}
           </Col>
         ))}
       </Row>
