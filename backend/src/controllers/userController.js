@@ -103,16 +103,33 @@ const updateUserProfile = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
-  res.send("get user")
-}
-
-const deleteUser = async (req, res) => {
-  res.send("delete user")
+  const users = await User.find({})
+  try {
+    if (users) {
+      res.status(200).json(users)
+    } else {
+      throw new Error("Something error")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
 }
 
 const getUserById = async (req, res) => {
-  res.send("get user by id")
+  const user = await User.findById(req.params.id)
+
+  try {
+    if (user) {
+      res.status(200).json(user)
+    } else {
+      throw new Error("User not found!")
+    }
+  } catch (error) {
+    res.status(404).json(user)
+  }
 }
+
+const deleteUser = async (req, res) => {}
 
 const updateUser = async (req, res) => {
   res.send("update user")
