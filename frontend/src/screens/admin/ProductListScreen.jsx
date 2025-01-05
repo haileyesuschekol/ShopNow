@@ -1,5 +1,4 @@
 import { FaTrash, FaEdit } from "react-icons/fa"
-
 import { Table, Button, Row, Col } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import Message from "../../components/Message"
@@ -7,6 +6,7 @@ import Loader from "../../components/Loader"
 import {
   useGetProductsQuery,
   useCreateProductMutation,
+  useDeleteProductMutation,
 } from "../../slices/productsApi"
 import { toast } from "react-toastify"
 
@@ -14,9 +14,17 @@ const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery()
   const [createProduct, { isLoading: loadingProduct }] =
     useCreateProductMutation()
+  const [deleteProduct, { isLoading: loadingDelete }] =
+    useDeleteProductMutation()
 
-  const deleteHandler = () => {
-    console.log("delete")
+  const deleteHandler = async (id) => {
+    try {
+      await deleteProduct(id)
+      toast.success("Product Deleted")
+      refetch()
+    } catch (error) {
+      toast.error(error?.data?.message || error.error)
+    }
   }
   const createProductHandler = async () => {
     try {
@@ -39,12 +47,13 @@ const ProductListScreen = () => {
           </Button>
         </Col>
       </Row>
-      {loadingProduct && <Loader />}
 
+      {loadingProduct && <Loader />}
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant="danger">{error?.data?.message}</Message>
       ) : (
         <>
           <Table striped hover responsive className="table-sm">
@@ -68,14 +77,14 @@ const ProductListScreen = () => {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <Link as={Link} to={`/admin/product/${product._id}/edit`}>
-                      <Button
-                        className="btn-sm variant='success"
-                        variant="light"
-                      >
-                        <FaEdit />
-                      </Button>
-                    </Link>
+                    <Button
+                      className="btn-sm variant='success"
+                      variant="light"
+                      as={Link}
+                      to={`/admin/product/${product._id}/edit`}
+                    >
+                      <FaEdit />
+                    </Button>
 
                     <Button
                       variant="danger"

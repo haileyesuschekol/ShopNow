@@ -80,7 +80,7 @@ const updateProduct = async (req, res) => {
   }
 }
 
-const deleteProduct = async () => {
+const deleteProduct = async (req, res) => {
   const product = await Product.findById(req.params.id)
   try {
     if (product) {
