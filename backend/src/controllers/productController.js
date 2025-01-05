@@ -93,10 +93,49 @@ const deleteProduct = async (req, res) => {
     res.status(404).json({ error: error.message })
   }
 }
+
+const createProductReview = async (req, res) => {
+  const { review, comment } = req.body
+  const product = await Product.findById(req.params.id)
+
+  try {
+    if (product) {
+      const alreadyReviewd = product.reviews.find(
+        (review) => review.user.toString() === req.user._id.toString()
+      )
+      if (alreadyReviewd) {
+        throw new Error("Product already reviewd")
+      }
+
+      const review = {
+        name: req.user.name,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      }
+
+      product.reviews.push(review)
+      product.numOfReviews = product.reviews.length
+      product.rating = product.reviews.reduce(
+        (acc, review) => acc + review.rating,
+        0
+      )
+      await product.save()
+      res.status(201).json({ message: "Review added" })
+    } else {
+      res.status(404)
+      throw new Error("Not Found")
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 export {
   getAllProduct,
   getSingleProduct,
   createProduct,
   updateProduct,
   deleteProduct,
+  createProductReview,
 }
