@@ -1,15 +1,26 @@
 import { FaTimes, FaTrash, FaEdit, FaCheck } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import { Table, Button } from "react-bootstrap"
+import { toast } from "react-toastify"
 import Message from "../../components/Message"
 import Loader from "../../components/Loader"
-import { useGetUserQuery } from "../../slices/usersApiSlice"
+import {
+  useGetUserQuery,
+  useDeleteUserMutation,
+} from "../../slices/usersApiSlice"
 
 const UserScreen = () => {
   const { data: users, refetch, isLoading, error } = useGetUserQuery()
+  const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation()
 
-  const deleteHandler = () => {
-    console.log("delete")
+  const deleteHandler = async (id) => {
+    try {
+      await deleteUser(id)
+      toast.success("User Deleted")
+      refetch()
+    } catch (error) {
+      toast.error(error?.data?.message || error.error)
+    }
   }
 
   if (isLoading) return <Loader />
@@ -17,6 +28,7 @@ const UserScreen = () => {
   return (
     <>
       <h2>Users</h2>
+      {loadingDelete && <Loader />}
       <Table striped hover responsive className="table-sm">
         <thead>
           <th>ID</th>
@@ -42,7 +54,7 @@ const UserScreen = () => {
                   )}
                 </td>
                 <td>
-                  <Link as={Link} to={`/order/${user._id}/edit`}>
+                  <Link as={Link} to={`/admin/user/${user._id}/edit`}>
                     <Button className="btn-sm variant='success">
                       <FaEdit />
                     </Button>

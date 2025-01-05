@@ -80,7 +80,7 @@ const ProductEditScreen = () => {
       toast.error(err?.data?.message || err.error)
     }
   }
-  console.log(product)
+
   return (
     <>
       <Link to="/admin/productlist" className="btn btn-light my-3">
@@ -114,7 +114,7 @@ const ProductEditScreen = () => {
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
-
+            {uploadLoading && <Loader />}
             <Form.Group controlId="image">
               <Form.Label>Image</Form.Label>
               <Form.Control
