@@ -129,7 +129,24 @@ const getUserById = async (req, res) => {
   }
 }
 
-const deleteUser = async (req, res) => {}
+const deleteUser = async (req, res) => {
+  const user = await User.findById(req.params.id)
+  try {
+    if (user) {
+      if (user.isAdmin) {
+        res.status(400)
+        throw new Error("Cannot delete Admin!")
+      }
+
+      await User.deleteOne({ _id: req.params.id })
+      res.status(200).json({ message: "User delete successfully" })
+    } else {
+      throw new Error("User not found!")
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
+}
 
 const updateUser = async (req, res) => {
   res.send("update user")
