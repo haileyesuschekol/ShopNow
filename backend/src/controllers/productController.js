@@ -6,7 +6,12 @@ const getAllProduct = async (req, res) => {
   const pageSize = 4
   const page = Number(req.query.pageNumber) || 1
   const keyword = req.query.keyword
-    ? { name: req.query.keyword, $options: "i" }
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
     : {}
 
   const count = await Product.countDocuments({ ...keyword })
