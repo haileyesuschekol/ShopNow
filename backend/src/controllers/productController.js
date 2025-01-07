@@ -3,9 +3,10 @@ import Product from "../models/productModel.js"
 
 //get all products
 const getAllProduct = async (req, res) => {
-  const pageSize = 8
-  const page = Number(req.query.pageNumber || 1)
-  const count = Product.countDocuments()
+  const pageSize = 4
+  const page = Number(req.query.pageNumber) || 1
+  const count = await Product.countDocuments()
+
   try {
     const products = await Product.find({})
       .limit(pageSize)
