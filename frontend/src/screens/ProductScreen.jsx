@@ -21,6 +21,7 @@ import {
 } from "../slices/productsApi"
 import { addToCart } from "../slices/cartSlice"
 import Rating from "../components/Rating"
+import Meta from "../components/Meta"
 
 const ProductScreen = () => {
   const { id: productId } = useParams()
@@ -68,6 +69,7 @@ const ProductScreen = () => {
     )
   return (
     <>
+      <Meta title={product.name} />
       <Link className="btn btn-light my-3" to="/">
         Back
       </Link>
