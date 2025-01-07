@@ -5,10 +5,14 @@ import Product from "../models/productModel.js"
 const getAllProduct = async (req, res) => {
   const pageSize = 4
   const page = Number(req.query.pageNumber) || 1
-  const count = await Product.countDocuments()
+  const keyword = req.query.keyword
+    ? { name: req.query.keyword, $options: "i" }
+    : {}
+
+  const count = await Product.countDocuments({ ...keyword })
 
   try {
-    const products = await Product.find({})
+    const products = await Product.find({ ...keyword })
       .limit(pageSize)
       .skip(pageSize * (page - 1))
     if (!products) {
