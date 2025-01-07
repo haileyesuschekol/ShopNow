@@ -3,13 +3,18 @@ import Product from "../models/productModel.js"
 
 //get all products
 const getAllProduct = async (req, res) => {
+  const pageSize = 8
+  const page = Number(req.query.pageNumber || 1)
+  const count = Product.countDocuments()
   try {
-    const product = await Product.find({})
-    if (!product) {
-      res.status(400)
+    const products = await Product.find({})
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+    if (!products) {
+      res.status(404)
       throw new Error("Resourse Not found")
     }
-    res.status(200).json(product)
+    res.status(200).json({ products, page, pages: Math.ceil(count / pageSize) })
   } catch (error) {
     res.send(error)
   }
