@@ -3,7 +3,7 @@ import Product from "../models/productModel.js"
 
 //get all products
 const getAllProduct = async (req, res) => {
-  const pageSize = 4
+  const pageSize = process.env.PAGINATION_LIMIT
   const page = Number(req.query.pageNumber) || 1
   const keyword = req.query.keyword
     ? {
