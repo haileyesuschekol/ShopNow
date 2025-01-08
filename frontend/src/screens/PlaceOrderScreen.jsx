@@ -83,7 +83,7 @@ const PlaceOrderScreen = () => {
                         </Col>
 
                         <Col>
-                          <Link to={`/products/${item._id}`}>{item.name}</Link>
+                          <Link to={`/product/${item._id}`}>{item.name}</Link>
                         </Col>
                         <Col md={4}>
                           {item.quantity} x ${item.price} = $
