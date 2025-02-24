@@ -28,11 +28,11 @@ const OrderListScreen = () => {
           {orders.map((order) => {
             const paidAtFormatted = order.paidAt
               ? format(new Date(order.paidAt), "yyyy-MM-dd HH:mm")
-              : order.paidAt.toLocalString()
+              : order.paidAt?.toLocalString()
 
             const createdAtFormatted = order.createdAt
               ? format(new Date(order.createdAt), "yyyy-MM-dd HH:mm")
-              : order.createdAt.toLocalString()
+              : order.createdAt?.toLocalString()
 
             const deliveredAtFormatted = order.deliveredAt ? (
               format(new Date(order.deliveredAt), "yyyy-MM-dd HH:mm")
