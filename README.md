@@ -4,41 +4,14 @@ An eCommerce web application that allows users to browse, purchase, and review p
 
 ---
 
-### Home
+### User
 
-![E-Commerce Website Screenshot](./screenshot/src6.png)
+![E-Commerce Website Screenshot](./screenshot/ecommerce-user-screenshot.png)
 
-### Product detail
+#
+### Admin
 
-![E-Commerce Website Screenshot](./screenshot/src4.png)
-
-### Place order
-
-![E-Commerce Website Screenshot](./screenshot/src3.png)
-
-### Admin product control
-
-![E-Commerce Website Screenshot](./screenshot/src1.png)
-
-### Shipping information
-
-![E-Commerce Website Screenshot](./screenshot/src7.png)
-
-### Payment
-
-![E-Commerce Website Screenshot](./screenshot/src8.png)
-
-### Orders
-
-![E-Commerce Website Screenshot](./screenshot/src33.png)
-
-### Products
-
-![E-Commerce Website Screenshot](./screenshot/src2.png)
-
-### Users
-
-![E-Commerce Website Screenshot](./screenshot/src55.png)
+![E-Commerce Website Screenshot](./screenshot/ecommerce-admin-screenshot.png)
 
 ---
 
