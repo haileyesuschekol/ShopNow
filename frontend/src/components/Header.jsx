@@ -81,7 +81,7 @@ const Header = () => {
               )}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown
-                  title="Admin"
+                  title="Dashboard"
                   id="username"
                   style={{ marginTop: "9px" }}
                 >
